@@ -13,6 +13,7 @@
 #' @param same_lag_matrix Logical. If `TRUE`, use the same coefficient matrix for all lags.
 #'
 #' @return A list with plot data, order frequencies, and the plot object.
+#' @importFrom rlang .data
 #' @export
 #'
 #' @examples
@@ -110,17 +111,22 @@ plotVMA <- function(order = c(2, 5), settings = NULL, R = 100, lag = 1:10, seed 
     all_order <- rbind(all_order, fit$order_table)
   }
 
-  all_curve$setting <- factor(all_curve$setting, levels = unique(all_curve$setting))
+  settings_levels <- unique(all_curve$setting)
+  all_curve$setting <- factor(all_curve$setting, levels = settings_levels)
 
   colors <- c("black", "grey70", "blue", "darkgreen", "brown")
-  p <- ggplot2::ggplot(
+  plot <- ggplot2::ggplot(
     all_curve,
-    ggplot2::aes(x = tau, y = mean_Sn, color = setting, group = setting)
+    ggplot2::aes(x = .data[["tau"]],
+                 y = .data[["mean_Sn"]],
+                 color = .data[["setting"]],
+                 group = .data[["setting"]]
+    )
   ) +
     ggplot2::geom_line(linewidth = 0.7) +
     ggplot2::geom_point(size = 1.8) +
     ggplot2::scale_x_continuous(breaks = lag) +
-    ggplot2::scale_color_manual(values = colors[seq_len(length(unique(all_curve$setting)))]) +
+    ggplot2::scale_color_manual(values = colors[seq_along(settings_levels)]) +
     ggplot2::labs(x = "Tau", y = expression(S[n](tau)), color = NULL) +
     ggplot2::theme_minimal() +
     ggplot2::theme(
@@ -132,14 +138,14 @@ plotVMA <- function(order = c(2, 5), settings = NULL, R = 100, lag = 1:10, seed 
     )
 
   if (length(unique(all_curve$model)) > 1) {
-    p <- p + ggplot2::facet_wrap(~model, nrow = 1)
+    plot <- plot + ggplot2::facet_wrap(~model, nrow = 1)
   } else {
-    p <- p + ggplot2::ggtitle(unique(all_curve$model))
+    plot <- plot + ggplot2::ggtitle(unique(all_curve$model))
   }
 
   list(
     data = all_curve,
     order_table = all_order,
-    plot = p
+    plot = plot
   )
 }

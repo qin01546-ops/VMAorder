@@ -20,7 +20,6 @@
 covVMA <- function(x, lag) {
   x <- as.matrix(x)
   n <- nrow(x)
-  p <- ncol(x)
   if (lag < 0 || lag >= n) {
     stop("lag must satisfy 0 <= lag <= n - 1.")
   }
