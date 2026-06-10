@@ -18,7 +18,9 @@
 #' stationVMA(fit$x)
 #' }
 stationVMA <- function(x, alpha = 0.05) {
-  x <- as.matrix(x); n <- nrow(x); p <- ncol(x)
+  x <- as.matrix(x)
+  n <- nrow(x)
+  p <- ncol(x)
 
   if (!requireNamespace("tseries", quietly = TRUE)) {
     stop("Package 'tseries' is required. Please install it first.")

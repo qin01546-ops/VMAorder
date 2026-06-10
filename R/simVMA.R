@@ -31,7 +31,7 @@ simVMAcoef <- function(p, order, nonzero_ratio = 1 / 60,
     stop("order must be a positive integer.")
   }
   if (length(nonzero_ratio) != 1 || is.na(nonzero_ratio) ||
-      nonzero_ratio <= 0 || nonzero_ratio > 1) {
+    nonzero_ratio <= 0 || nonzero_ratio > 1) {
     stop("nonzero_ratio must be in (0, 1].")
   }
   if (min >= max) {
@@ -127,8 +127,10 @@ simVMA <- function(n, p, order, coeff = NULL, nonzero_ratio = 1 / 60, min = -0.4
   burnin <- as.integer(burnin)
 
   if (is.null(coeff)) {
-    coeff <- simVMAcoef(p = p, order = order, nonzero_ratio = nonzero_ratio,
-                        min = min, max = max, same_lag_matrix = same_lag_matrix)
+    coeff <- simVMAcoef(
+      p = p, order = order, nonzero_ratio = nonzero_ratio,
+      min = min, max = max, same_lag_matrix = same_lag_matrix
+    )
   } else {
     coeff <- as.array(coeff)
     if (!all(dim(coeff) == c(p, p, order))) {

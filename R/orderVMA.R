@@ -24,29 +24,40 @@
 #' fit <- simVMA(n = 120, p = 5, order = 2, seed = 123)
 #' orderVMA(fit$x, lag = 1:8, draw = FALSE)
 orderVMA <- function(x, lag = 1:10, center = FALSE, draw = TRUE,
-                     tail = 3, c = 3, min_width = 0.02, min_prop_after = 1,consecutive = 1) {
-
-  x <- as.matrix(x); lags <- as.numeric(lag)
+                     tail = 3, c = 3, min_width = 0.02, min_prop_after = 1, consecutive = 1) {
+  x <- as.matrix(x)
+  lags <- as.numeric(lag)
 
   interval_order <- function(s, lag) {
     s <- as.numeric(s)
     lag <- as.numeric(lag)
 
-    if (length(s) != length(lag)) {stop("length(s) must be equal to length(lag).")}
+    if (length(s) != length(lag)) {
+      stop("length(s) must be equal to length(lag).")
+    }
     L <- length(s)
 
-    if (tail >= L) {stop("tail must be smaller than length(s).")}
-    if (min_prop_after <= 0 || min_prop_after > 1) {stop("min_prop_after must be in (0, 1].")}
-    if (consecutive < 1) {stop("consecutive must be at least 1.")}
+    if (tail >= L) {
+      stop("tail must be smaller than length(s).")
+    }
+    if (min_prop_after <= 0 || min_prop_after > 1) {
+      stop("min_prop_after must be in (0, 1].")
+    }
+    if (consecutive < 1) {
+      stop("consecutive must be at least 1.")
+    }
 
     tail_id <- (L - tail + 1):L
     tail_value <- s[tail_id]
 
     tail_mean <- mean(tail_value, na.rm = TRUE)
     tail_sd <- sd(tail_value, na.rm = TRUE)
-    if (is.na(tail_sd)) {tail_sd <- 0}
+    if (is.na(tail_sd)) {
+      tail_sd <- 0
+    }
     width <- max(c * tail_sd, min_width)
-    lower <- 1 - width; upper <- 1 + width
+    lower <- 1 - width
+    upper <- 1 + width
     inside <- (s >= lower) & (s <= upper)
 
     stable_start <- NA
@@ -65,8 +76,11 @@ orderVMA <- function(x, lag = 1:10, center = FALSE, draw = TRUE,
       }
     }
 
-    if (is.na(stable_start)) {q_hat <- lag[which.max(s)]}
-    else {q_hat <- stable_start - 1}
+    if (is.na(stable_start)) {
+      q_hat <- lag[which.max(s)]
+    } else {
+      q_hat <- stable_start - 1
+    }
 
     list(
       q_hat = q_hat,
@@ -98,7 +112,7 @@ orderVMA <- function(x, lag = 1:10, center = FALSE, draw = TRUE,
     plot(
       result_table$lag,
       result_table$Sn,
-      type = "b", pch = 15, lwd = 2,  xaxt = "n",
+      type = "b", pch = 15, lwd = 2, xaxt = "n",
       xlab = "Tau", ylab = expression(S[n](tau))
     )
     axis(1, at = result_table$lag, labels = result_table$lag)

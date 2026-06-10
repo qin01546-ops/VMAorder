@@ -18,10 +18,14 @@
 #' x <- matrix(rnorm(100 * 4), nrow = 100, ncol = 4)
 #' covVMA(x, lag = 1)
 covVMA <- function(x, lag) {
-  x <- as.matrix(x); n <- nrow(x); p <- ncol(x)
-  if (lag < 0 || lag >= n) { stop("lag must satisfy 0 <= lag <= n - 1.") }
+  x <- as.matrix(x)
+  n <- nrow(x)
+  p <- ncol(x)
+  if (lag < 0 || lag >= n) {
+    stop("lag must satisfy 0 <= lag <= n - 1.")
+  }
   X1 <- x[1:(n - lag), , drop = FALSE]
   X2 <- x[(1 + lag):n, , drop = FALSE]
   gamma <- crossprod(X1, X2) / n
-  return (gamma)
+  return(gamma)
 }

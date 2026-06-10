@@ -21,7 +21,6 @@
 #' out <- plotVMA(order = c(2, 3), settings = settings, R = 5, lag = 1:6)
 #' out$plot
 #' }
-
 plotVMA <- function(order = c(2, 5), settings = NULL, R = 100, lag = 1:10, seed = 123,
                     nonzero_ratio = 1 / 60, min = -0.4, max = 0.6, same_lag_matrix = FALSE) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
@@ -31,15 +30,19 @@ plotVMA <- function(order = c(2, 5), settings = NULL, R = 100, lag = 1:10, seed 
   all_curve <- data.frame()
   all_order <- data.frame()
 
-  if (!is.null(seed)) {set.seed(seed)}
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
 
   vma_mean_curve <- function(order) {
     if (is.null(settings)) {
       settings <- data.frame(
         p = c(10, 10, 10, 30, 50),
         n = c(30, 50, 500, 30, 50),
-        label = c("p=10, n=30", "p=10, n=50", "p=10, n=500",
-                  "p=n=30", "p=n=50")
+        label = c(
+          "p=10, n=30", "p=10, n=50", "p=10, n=500",
+          "p=n=30", "p=n=50"
+        )
       )
     }
     if (!all(c("p", "n") %in% names(settings))) {
@@ -57,8 +60,10 @@ plotVMA <- function(order = c(2, 5), settings = NULL, R = 100, lag = 1:10, seed 
       n <- settings$n[i]
       label <- settings$label[i]
 
-      coeff <- simVMAcoef(p = p, order = order, nonzero_ratio = nonzero_ratio,
-                          min = min, max = max, same_lag_matrix = same_lag_matrix)
+      coeff <- simVMAcoef(
+        p = p, order = order, nonzero_ratio = nonzero_ratio,
+        min = min, max = max, same_lag_matrix = same_lag_matrix
+      )
 
       stat_mat <- matrix(NA_real_, nrow = R, ncol = length(lag))
       q_hat <- numeric(R)
@@ -127,7 +132,7 @@ plotVMA <- function(order = c(2, 5), settings = NULL, R = 100, lag = 1:10, seed 
     )
 
   if (length(unique(all_curve$model)) > 1) {
-    p <- p + ggplot2::facet_wrap(~ model, nrow = 1)
+    p <- p + ggplot2::facet_wrap(~model, nrow = 1)
   } else {
     p <- p + ggplot2::ggtitle(unique(all_curve$model))
   }

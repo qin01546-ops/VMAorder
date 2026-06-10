@@ -24,10 +24,17 @@
 #' fit <- simVMA(n = 100, p = 5, order = 2, seed = 123)
 #' statVMA(fit$x, lag = 1:5)
 statVMA <- function(x, lag = 1:10, center = FALSE) {
-  x <- as.matrix(x); n <- nrow(x); p <- ncol(x); lags <- as.numeric(lag)
+  x <- as.matrix(x)
+  n <- nrow(x)
+  p <- ncol(x)
+  lags <- as.numeric(lag)
 
-  if (max(lags) + 1 >= n) {stop("max(lag) + 1 must be smaller than sample size n.")}
-  if (center) {x <- scale(x, center = TRUE, scale = FALSE)}
+  if (max(lags) + 1 >= n) {
+    stop("max(lag) + 1 must be smaller than sample size n.")
+  }
+  if (center) {
+    x <- scale(x, center = TRUE, scale = FALSE)
+  }
 
   f_value <- function(k) {
     matt <- covVMA(x, k)
