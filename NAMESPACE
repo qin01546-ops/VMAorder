@@ -3,4 +3,5 @@
 export(covVMA)
 export(simVMA)
 export(simVMAcoef)
+export(statVMA)
 export(stationVMA)
