@@ -2,3 +2,4 @@
 ^renv\.lock$
 ^VMAorder\.Rproj$
 ^\.Rproj\.user$
+^README\.Rmd$
