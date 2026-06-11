@@ -18,6 +18,8 @@
 #' @param consecutive Required number of consecutive lags inside the interval.
 #'
 #' @return A list with the estimated order, interval result, and table.
+#' @importFrom stats sd
+#' @importFrom graphics axis abline
 #' @export
 #'
 #' @examples
