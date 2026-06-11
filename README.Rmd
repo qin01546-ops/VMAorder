@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of VMAorder is to ...
+VMAorder provides tools for simulating vector moving-average models, computing VMA statistics, estimating model order, and visualizing statistic curves.
 
 ## Installation
 
@@ -34,7 +34,9 @@ pak::pak("qin01546-ops/VMAorder")
 
 
 ```{r example}
-# library(VMAorder)
-## basic example code
+library(VMAorder)
+
+fit <- simVMA(n = 100, p = 5, order = 2, seed = 123)
+statVMA(fit$x, lag = 1:5)
 ```
 

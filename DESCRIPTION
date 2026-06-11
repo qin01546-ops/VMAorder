@@ -1,10 +1,15 @@
 Package: VMAorder
-Title: What the Package Does (One Line, Title Case)
+Title: Tools for Vector Moving Average Order Estimation
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Enxin", "Qin", email = "19719272939@163.com", role = c("aut", "cre"))
+Description: Provides tools for simulating vector moving-average models,
+    computing lagged cross-covariance matrices, constructing VMA order
+    statistics, estimating model order, testing stationarity, and visualizing
+    statistic curves.
 License: MIT + file LICENSE
+URL: https://qin01546-ops.github.io/VMAorder
+BugReports: https://github.com/qin01546-ops/VMAorder/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
@@ -16,3 +21,4 @@ Imports:
     rlang,
     tseries
 Config/testthat/edition: 3
+
