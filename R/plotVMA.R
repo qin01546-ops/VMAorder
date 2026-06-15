@@ -14,6 +14,7 @@
 #'
 #' @return A list with plot data, order frequencies, and the plot object.
 #' @importFrom rlang .data
+#' @importFrom grDevices hcl.colors
 #' @export
 #'
 #' @examples
@@ -114,19 +115,21 @@ plotVMA <- function(order = c(2, 5), settings = NULL, R = 100, lag = 1:10, seed 
   settings_levels <- unique(all_curve$setting)
   all_curve$setting <- factor(all_curve$setting, levels = settings_levels)
 
-  colors <- c("black", "grey70", "blue", "darkgreen", "brown")
+  colors <- grDevices::hcl.colors(length(settings_levels), palette = "Dark 3")
+
   plot <- ggplot2::ggplot(
     all_curve,
-    ggplot2::aes(x = .data[["tau"]],
-                 y = .data[["mean_Sn"]],
-                 color = .data[["setting"]],
-                 group = .data[["setting"]]
+    ggplot2::aes(
+      x = .data[["tau"]],
+      y = .data[["mean_Sn"]],
+      color = .data[["setting"]],
+      group = .data[["setting"]]
     )
   ) +
     ggplot2::geom_line(linewidth = 0.7) +
     ggplot2::geom_point(size = 1.8) +
     ggplot2::scale_x_continuous(breaks = lag) +
-    ggplot2::scale_color_manual(values = colors[seq_along(settings_levels)]) +
+    ggplot2::scale_color_manual(values = colors) +
     ggplot2::labs(x = "Tau", y = expression(S[n](tau)), color = NULL) +
     ggplot2::theme_minimal() +
     ggplot2::theme(
