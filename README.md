@@ -6,8 +6,6 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/qin01546-ops/VMAorder/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/qin01546-ops/VMAorder/actions/workflows/R-CMD-check.yaml)
-[![Codecov test
-coverage](https://codecov.io/gh/qin01546-ops/VMAorder/graph/badge.svg)](https://app.codecov.io/gh/qin01546-ops/VMAorder)
 
 <!-- badges: end -->
 

@@ -1,3 +1,3 @@
-# VMAorder (development version)
+1# VMAorder (development version)
 
 * Initial CRAN submission.
