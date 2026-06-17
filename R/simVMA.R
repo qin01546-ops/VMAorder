@@ -176,7 +176,6 @@ simVMA <- function(n, p, order, coeff = NULL, nonzero_ratio = 1 / 60, min = -0.4
 
   list(
     x = x,
-    coef = coeff,
     coeff = coeff,
     innovations = z,
     order = order,

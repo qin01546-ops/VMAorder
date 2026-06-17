@@ -83,9 +83,9 @@ The simulated data are stored in `fit$x`, and the coefficient matrices
 are stored in `fit$coef` or `fit$coeff`.
 
 ``` r
-dim(fit$coef)
+dim(fit$coeff)
 #> [1] 5 5 2
-fit$coef[, , 1]
+fit$coeff[, , 1]
 #>    X1 X2          X3 X4 X5
 #> X1  0  0 0.000000000  0  0
 #> X2  0  0 0.000000000  0  0

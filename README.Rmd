@@ -88,8 +88,8 @@ The simulated data are stored in `fit$x`, and the coefficient matrices are store
 in `fit$coef` or `fit$coeff`.
 
 ```{r coefficient-example}
-dim(fit$coef)
-fit$coef[, , 1]
+dim(fit$coeff)
+fit$coeff[, , 1]
 ```
 
 ## Lagged Cross-Covariance Matrix
