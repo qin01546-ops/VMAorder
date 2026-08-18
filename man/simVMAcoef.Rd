@@ -10,7 +10,8 @@ simVMAcoef(
   nonzero_ratio = 1/60,
   min = -0.4,
   max = 0.6,
-  same_lag_matrix = FALSE
+  same_lag_matrix = FALSE,
+  scale_by_sqrt_p = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ simVMAcoef(
 \item{max}{Upper bound for non-zero coefficients.}
 
 \item{same_lag_matrix}{Logical. If \code{TRUE}, use the same matrix for all lags.}
+
+\item{scale_by_sqrt_p}{Logical. If \code{TRUE}, divide generated non-zero
+coefficients by \eqn{\sqrt{p}}.}
 }
 \value{
 A numeric array with dimension \code{c(p, p, order)}.

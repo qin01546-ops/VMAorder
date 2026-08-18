@@ -13,6 +13,7 @@ simVMA(
   min = -0.4,
   max = 0.6,
   same_lag_matrix = FALSE,
+  scale_by_sqrt_p = TRUE,
   innov = NULL,
   innov_cov = diag(p),
   burnin = 0,
@@ -36,6 +37,9 @@ simVMA(
 
 \item{same_lag_matrix}{Logical. If \code{TRUE}, use the same coefficient matrix
 for all lags.}
+
+\item{scale_by_sqrt_p}{Logical. If \code{TRUE}, divide generated non-zero
+coefficients by \eqn{\sqrt{p}} when \code{coeff = NULL}.}
 
 \item{innov}{An optional innovation matrix.}
 

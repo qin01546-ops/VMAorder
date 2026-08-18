@@ -38,14 +38,14 @@ statVMA <- function(x, lag = 1:10, center = FALSE) {
 
   f_value <- function(k) {
     matt <- covVMA(x, k)
-    gamma <- (matt %*% t(matt)) / p
-    sum(diag(gamma))
+    sum(matt * matt) / p
   }
 
   fn_tau <- sapply(lags, f_value)
   fn_tau_next <- sapply(lags + 1, f_value)
 
   stat <- fn_tau / fn_tau_next
+  stat[fn_tau_next == 0] <- 1
 
   result_table <- data.frame(
     lag = lags,

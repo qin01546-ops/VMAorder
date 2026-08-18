@@ -4,17 +4,7 @@
 \alias{orderVMA}
 \title{Estimate VMA Order}
 \usage{
-orderVMA(
-  x,
-  lag = 1:10,
-  center = FALSE,
-  draw = TRUE,
-  tail = 3,
-  c = 3,
-  min_width = 0.02,
-  min_prop_after = 1,
-  consecutive = 1
-)
+orderVMA(x, lag = 1:10, center = FALSE, draw = TRUE, c0 = 1)
 }
 \arguments{
 \item{x}{A numeric matrix or data frame.}
@@ -25,26 +15,25 @@ orderVMA(
 
 \item{draw}{Logical. If \code{TRUE}, draw the statistic curve.}
 
-\item{tail}{Number of tail lags used to estimate the interval width.}
-
-\item{c}{Multiplier for the tail standard deviation.}
-
-\item{min_width}{Minimum half-width of the stable interval.}
-
-\item{min_prop_after}{Required proportion of later lags inside the interval.}
-
-\item{consecutive}{Required number of consecutive lags inside the interval.}
+\item{c0}{Positive threshold constant for the tail-amplified rule.}
 }
 \value{
-A list with the estimated order, interval result, and table.
+A list with the estimated order, threshold information, candidate
+criterion table, and lag-wise statistic table.
 }
 \description{
-Estimates the VMA order using a stable-interval rule based on the statistic curve.
+Estimates the VMA order using a tail-amplified ratio rule.
 }
 \details{
-The order is selected from the statistics computed by \code{\link{statVMA}}.
-The selected order is one lag before the statistic enters a stable interval
-around 1.
+The order is selected from the adjacent-lag ratios computed by
+\code{\link{statVMA}}. For candidate lags \eqn{1,\ldots,M}, the rule computes
+\deqn{
+G_n(K) = 1 + \sqrt{p}\max_{K < \tau \le M}|S_n(\tau)-1|,
+\quad K = 0,\ldots,M.
+}
+The estimated order is the smallest \eqn{K} such that
+\eqn{G_n(K) \le 1 + c_0}. Equivalently, all later ratios must lie in the
+deterministic interval \eqn{1 \pm c_0 / \sqrt{p}}.
 }
 \examples{
 fit <- simVMA(n = 120, p = 5, order = 2, seed = 123)

@@ -3,6 +3,8 @@ Title: Tools for Vector Moving Average Order Estimation
 Version: 0.0.0.9000
 Authors@R: 
     person("Enxin", "Qin", email = "19719272939@163.com", role = c("aut", "cre"))
+Author: Enxin Qin [aut, cre]
+Maintainer: Enxin Qin <19719272939@163.com>
 Description: Provides tools for simulating vector moving-average models,
     computing lagged cross-covariance matrices, constructing VMA order
     statistics, estimating model order, testing stationarity, and visualizing

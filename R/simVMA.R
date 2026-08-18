@@ -13,6 +13,8 @@
 #' @param min Lower bound for non-zero coefficients.
 #' @param max Upper bound for non-zero coefficients.
 #' @param same_lag_matrix Logical. If `TRUE`, use the same matrix for all lags.
+#' @param scale_by_sqrt_p Logical. If `TRUE`, divide generated non-zero
+#'   coefficients by \eqn{\sqrt{p}}.
 #'
 #' @return A numeric array with dimension `c(p, p, order)`.
 #' @export
@@ -23,7 +25,8 @@
 #' dim(coef)
 simVMAcoef <- function(p, order, nonzero_ratio = 1 / 60,
                        min = -0.4, max = 0.6,
-                       same_lag_matrix = FALSE) {
+                       same_lag_matrix = FALSE,
+                       scale_by_sqrt_p = TRUE) {
   if (length(p) != 1 || is.na(p) || p <= 0 || p != floor(p)) {
     stop("p must be a positive integer.")
   }
@@ -37,16 +40,23 @@ simVMAcoef <- function(p, order, nonzero_ratio = 1 / 60,
   if (min >= max) {
     stop("min must be smaller than max.")
   }
+  if (length(scale_by_sqrt_p) != 1 || is.na(scale_by_sqrt_p)) {
+    stop("scale_by_sqrt_p must be TRUE or FALSE.")
+  }
 
   p <- as.integer(p)
   order <- as.integer(order)
   coeff <- array(0, dim = c(p, p, order))
+  # Each lag matrix has the same sparsity level; order only changes the number
+  # of lag slices, not the number of non-zero entries per slice.
   num_nonzero <- max(1, round(nonzero_ratio * p * p))
+  coefficient_scale <- if (isTRUE(scale_by_sqrt_p)) sqrt(p) else 1
 
   make_one_matrix <- function() {
     A <- matrix(0, nrow = p, ncol = p)
     nonzero_id <- sample.int(p * p, num_nonzero)
-    A[nonzero_id] <- stats::runif(num_nonzero, min = min, max = max)
+    A[nonzero_id] <- stats::runif(num_nonzero, min = min, max = max) /
+      coefficient_scale
     A
   }
 
@@ -90,6 +100,8 @@ simVMAcoef <- function(p, order, nonzero_ratio = 1 / 60,
 #' @param max Upper bound for generated coefficients.
 #' @param same_lag_matrix Logical. If `TRUE`, use the same coefficient matrix
 #'   for all lags.
+#' @param scale_by_sqrt_p Logical. If `TRUE`, divide generated non-zero
+#'   coefficients by \eqn{\sqrt{p}} when `coeff = NULL`.
 #' @param innov An optional innovation matrix.
 #' @param innov_cov Covariance matrix for generated Gaussian innovations.
 #' @param burnin Number of initial observations to discard.
@@ -104,7 +116,8 @@ simVMAcoef <- function(p, order, nonzero_ratio = 1 / 60,
 #' fit <- simVMA(n = 100, p = 5, order = 2)
 #' head(fit$x)
 simVMA <- function(n, p, order, coeff = NULL, nonzero_ratio = 1 / 60, min = -0.4, max = 0.6,
-                   same_lag_matrix = FALSE, innov = NULL, innov_cov = diag(p), burnin = 0, seed = NULL) {
+                   same_lag_matrix = FALSE, scale_by_sqrt_p = TRUE,
+                   innov = NULL, innov_cov = diag(p), burnin = 0, seed = NULL) {
   if (!is.null(seed)) {
     set.seed(seed)
   }
@@ -129,7 +142,8 @@ simVMA <- function(n, p, order, coeff = NULL, nonzero_ratio = 1 / 60, min = -0.4
   if (is.null(coeff)) {
     coeff <- simVMAcoef(
       p = p, order = order, nonzero_ratio = nonzero_ratio,
-      min = min, max = max, same_lag_matrix = same_lag_matrix
+      min = min, max = max, same_lag_matrix = same_lag_matrix,
+      scale_by_sqrt_p = scale_by_sqrt_p
     )
   } else {
     coeff <- as.array(coeff)
@@ -160,13 +174,10 @@ simVMA <- function(n, p, order, coeff = NULL, nonzero_ratio = 1 / 60, min = -0.4
     z <- z[seq_len(innov_n), , drop = FALSE]
   }
 
-  x_all <- matrix(0, nrow = total_n, ncol = p)
-  for (t in seq_len(total_n)) {
-    xt <- z[t + order, ]
-    for (h in seq_len(order)) {
-      xt <- xt + as.numeric(coeff[, , h] %*% z[t + order - h, ])
-    }
-    x_all[t, ] <- xt
+  x_all <- z[order + seq_len(total_n), , drop = FALSE]
+  for (h in seq_len(order)) {
+    lagged_z <- z[order + seq_len(total_n) - h, , drop = FALSE]
+    x_all <- x_all + lagged_z %*% t(coeff[, , h])
   }
 
   keep_id <- seq.int(burnin + 1, total_n)
@@ -180,6 +191,7 @@ simVMA <- function(n, p, order, coeff = NULL, nonzero_ratio = 1 / 60, min = -0.4
     innovations = z,
     order = order,
     p = p,
-    n = n
+    n = n,
+    scale_by_sqrt_p = scale_by_sqrt_p
   )
 }

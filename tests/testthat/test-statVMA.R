@@ -17,3 +17,10 @@ test_that("statVMA rejects too large lags", {
     "sample size"
   )
 })
+
+test_that("statVMA sets Sn to 1 when the denominator is zero", {
+  x <- matrix(0, nrow = 20, ncol = 3)
+  out <- statVMA(x, lag = 1:4)
+
+  expect_equal(out$Sn, rep(1, 4))
+})
