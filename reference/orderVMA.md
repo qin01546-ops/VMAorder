@@ -1,22 +1,11 @@
 # Estimate VMA Order
 
-Estimates the VMA order using a stable-interval rule based on the
-statistic curve.
+Estimates the VMA order using a tail-amplified ratio rule.
 
 ## Usage
 
 ``` r
-orderVMA(
-  x,
-  lag = 1:10,
-  center = FALSE,
-  draw = TRUE,
-  tail = 3,
-  c = 3,
-  min_width = 0.02,
-  min_prop_after = 1,
-  consecutive = 1
-)
+orderVMA(x, lag = 1:10, center = FALSE, draw = TRUE, c0 = 1)
 ```
 
 ## Arguments
@@ -37,36 +26,24 @@ orderVMA(
 
   Logical. If `TRUE`, draw the statistic curve.
 
-- tail:
+- c0:
 
-  Number of tail lags used to estimate the interval width.
-
-- c:
-
-  Multiplier for the tail standard deviation.
-
-- min_width:
-
-  Minimum half-width of the stable interval.
-
-- min_prop_after:
-
-  Required proportion of later lags inside the interval.
-
-- consecutive:
-
-  Required number of consecutive lags inside the interval.
+  Positive threshold constant for the tail-amplified rule.
 
 ## Value
 
-A list with the estimated order, interval result, and table.
+A list with the estimated order, threshold information, candidate
+criterion table, and lag-wise statistic table.
 
 ## Details
 
-The order is selected from the statistics computed by
+The order is selected from the adjacent-lag ratios computed by
 [`statVMA`](https://qin01546-ops.github.io/VMAorder/reference/statVMA.md).
-The selected order is one lag before the statistic enters a stable
-interval around 1.
+For candidate lags \\1,\ldots,M\\, the rule computes \$\$ G_n(K) = 1 +
+\sqrt{p}\max\_{K \< \tau \le M}\|S_n(\tau)-1\|, \quad K = 0,\ldots,M.
+\$\$ The estimated order is the smallest \\K\\ such that \\G_n(K) \le
+1 + c_0\\. Equivalently, all later ratios must lie in the deterministic
+interval \\1 \pm c_0 / \sqrt{p}\\.
 
 ## Examples
 
@@ -74,52 +51,74 @@ interval around 1.
 fit <- simVMA(n = 120, p = 5, order = 2, seed = 123)
 orderVMA(fit$x, lag = 1:8, draw = FALSE)
 #> $order
-#> [1] 2
+#> [1] 8
 #> 
 #> $interval
 #> $interval$q_hat
-#> [1] 2
-#> 
-#> $interval$stable_start
-#> [1] 3
+#> [1] 8
 #> 
 #> $interval$lower
-#> [1] -0.7010508
+#> [1] 0.5527864
 #> 
 #> $interval$upper
-#> [1] 2.701051
-#> 
-#> $interval$tail_mean
-#> [1] 1.375998
-#> 
-#> $interval$tail_sd
-#> [1] 0.5670169
+#> [1] 1.447214
 #> 
 #> $interval$width
-#> [1] 1.701051
+#> [1] 0.4472136
+#> 
+#> $interval$c0
+#> [1] 1
 #> 
 #> $interval$inside
-#> [1]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+#> [1]  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
 #> 
+#> $interval$abs_deviation
+#> [1] 0.42985189 1.05108082 0.46606860 0.42241005 0.01679600 0.08452416 0.17862708
+#> [8] 0.91177511
+#> 
+#> $interval$criterion
+#>   K tail_max_abs       Gn  pass
+#> 1 0    1.0510808 3.350288 FALSE
+#> 2 1    1.0510808 3.350288 FALSE
+#> 3 2    0.9117751 3.038791 FALSE
+#> 4 3    0.9117751 3.038791 FALSE
+#> 5 4    0.9117751 3.038791 FALSE
+#> 6 5    0.9117751 3.038791 FALSE
+#> 7 6    0.9117751 3.038791 FALSE
+#> 8 7    0.9117751 3.038791 FALSE
+#> 9 8    0.0000000 1.000000  TRUE
+#> 
+#> 
+#> $criterion
+#>   K tail_max_abs       Gn  pass
+#> 1 0    1.0510808 3.350288 FALSE
+#> 2 1    1.0510808 3.350288 FALSE
+#> 3 2    0.9117751 3.038791 FALSE
+#> 4 3    0.9117751 3.038791 FALSE
+#> 5 4    0.9117751 3.038791 FALSE
+#> 6 5    0.9117751 3.038791 FALSE
+#> 7 6    0.9117751 3.038791 FALSE
+#> 8 7    0.9117751 3.038791 FALSE
+#> 9 8    0.0000000 1.000000  TRUE
 #> 
 #> $table
-#>   lag        Sn inside_interval   lower  upper  width tail_mean tail_sd
-#> 1   1 0.3658179            TRUE -0.7011 2.7011 1.7011     1.376   0.567
-#> 2   2 3.8216018           FALSE -0.7011 2.7011 1.7011     1.376   0.567
-#> 3   3 0.4625264            TRUE -0.7011 2.7011 1.7011     1.376   0.567
-#> 4   4 1.5549028            TRUE -0.7011 2.7011 1.7011     1.376   0.567
-#> 5   5 0.8004772            TRUE -0.7011 2.7011 1.7011     1.376   0.567
-#> 6   6 1.3808891            TRUE -0.7011 2.7011 1.7011     1.376   0.567
-#> 7   7 0.8065515            TRUE -0.7011 2.7011 1.7011     1.376   0.567
-#> 8   8 1.9405537            TRUE -0.7011 2.7011 1.7011     1.376   0.567
-#>   stable_start q_hat_interval
-#> 1            3              2
-#> 2            3              2
-#> 3            3              2
-#> 4            3              2
-#> 5            3              2
-#> 6            3              2
-#> 7            3              2
-#> 8            3              2
+#>   lag        Sn inside_interval abs_deviation  lower  upper  width c0
+#> 1   1 0.5701481            TRUE        0.4299 0.5528 1.4472 0.4472  1
+#> 2   2 2.0510808           FALSE        1.0511 0.5528 1.4472 0.4472  1
+#> 3   3 0.5339314           FALSE        0.4661 0.5528 1.4472 0.4472  1
+#> 4   4 1.4224100            TRUE        0.4224 0.5528 1.4472 0.4472  1
+#> 5   5 0.9832040            TRUE        0.0168 0.5528 1.4472 0.4472  1
+#> 6   6 1.0845242            TRUE        0.0845 0.5528 1.4472 0.4472  1
+#> 7   7 0.8213729            TRUE        0.1786 0.5528 1.4472 0.4472  1
+#> 8   8 1.9117751           FALSE        0.9118 0.5528 1.4472 0.4472  1
+#>   q_hat_interval
+#> 1              8
+#> 2              8
+#> 3              8
+#> 4              8
+#> 5              8
+#> 6              8
+#> 7              8
+#> 8              8
 #> 
 ```

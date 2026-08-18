@@ -45,7 +45,8 @@
 <span>  nonzero_ratio <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">60</span>,</span>
 <span>  min <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span>,</span>
 <span>  max <span class="op">=</span> <span class="fl">0.6</span>,</span>
-<span>  same_lag_matrix <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  same_lag_matrix <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  scale_by_sqrt_p <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -76,6 +77,11 @@
 <dt id="arg-same-lag-matrix">same_lag_matrix<a class="anchor" aria-label="anchor" href="#arg-same-lag-matrix"></a></dt>
 <dd><p>Logical. If <code>TRUE</code>, use the same matrix for all lags.</p></dd>
 
+
+<dt id="arg-scale-by-sqrt-p">scale_by_sqrt_p<a class="anchor" aria-label="anchor" href="#arg-scale-by-sqrt-p"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, divide generated non-zero
+coefficients by \(\sqrt{p}\).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -105,7 +111,7 @@ The slice <code>coef[, , h]</code> corresponds to <code>A_h</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

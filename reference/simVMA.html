@@ -48,6 +48,7 @@
 <span>  min <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span>,</span>
 <span>  max <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>  same_lag_matrix <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  scale_by_sqrt_p <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  innov <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  innov_cov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,</span>
 <span>  burnin <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -92,6 +93,11 @@
 for all lags.</p></dd>
 
 
+<dt id="arg-scale-by-sqrt-p">scale_by_sqrt_p<a class="anchor" aria-label="anchor" href="#arg-scale-by-sqrt-p"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, divide generated non-zero
+coefficients by \(\sqrt{p}\) when <code>coeff = NULL</code>.</p></dd>
+
+
 <dt id="arg-innov">innov<a class="anchor" aria-label="anchor" href="#arg-innov"></a></dt>
 <dd><p>An optional innovation matrix.</p></dd>
 
@@ -127,13 +133,13 @@ where <code>z_t</code> is white noise and <code>A_h</code> is the coefficient ma
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">simVMA</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, p <span class="op">=</span> <span class="fl">5</span>, order <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              X1         X2         X3           X4         X5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -0.1089660  0.4520302 -0.4628790  1.102593437 -1.4413167</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.1172420  0.5268557 -1.9111513 -0.784310368 -1.6156411</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.1830826 -0.2302622  0.3698160 -0.596863723  0.6076538</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  1.2805549  1.3974267 -0.4622881  0.005525749  0.7484698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] -1.7272706  1.7636530  0.3219559 -0.311691381  0.5811898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]  1.6901844  0.4856014 -0.2840014  0.764676679  0.1845464</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              X1         X2         X3         X4         X5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -0.1089660  0.4520302 -0.4628790  1.1041295 -1.4369972</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.1172420  0.5268557 -1.9111513 -0.5242478 -1.6133441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.1830826 -0.2302622  0.3698160 -0.4585726  0.6171376</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  1.2805549  1.3974267 -0.4622881  0.5765070  0.7466347</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] -1.7272706  1.7636530  0.3219559 -0.4221787  0.5834838</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]  1.6901844  0.4856014 -0.2840014  0.9027912  0.1829487</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -145,7 +151,7 @@ where <code>z_t</code> is white noise and <code>A_h</code> is the coefficient ma
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

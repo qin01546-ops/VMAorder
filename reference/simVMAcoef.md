@@ -11,7 +11,8 @@ simVMAcoef(
   nonzero_ratio = 1/60,
   min = -0.4,
   max = 0.6,
-  same_lag_matrix = FALSE
+  same_lag_matrix = FALSE,
+  scale_by_sqrt_p = TRUE
 )
 ```
 
@@ -40,6 +41,11 @@ simVMAcoef(
 - same_lag_matrix:
 
   Logical. If `TRUE`, use the same matrix for all lags.
+
+- scale_by_sqrt_p:
+
+  Logical. If `TRUE`, divide generated non-zero coefficients by
+  \\\sqrt{p}\\.
 
 ## Value
 
